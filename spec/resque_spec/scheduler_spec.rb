@@ -116,19 +116,19 @@ describe ResqueSpec do
       end
 
       it "adds to the scheduled queue hash" do
-        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+        ResqueSpec.queue_by_name(:test_queue_scheduled).should_not be_empty
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NoQueueClass.to_s)
+        ResqueSpec.queue_by_name(:test_queue_scheduled).first.should include(:class => NoQueueClass.to_s)
       end
 
       it "sets the arguments on the queue" do
-        ResqueSpec.queue_by_name(:test_queue).first.should include(:time => scheduled_at)
+        ResqueSpec.queue_by_name(:test_queue_scheduled).first.should include(:time => scheduled_at)
       end
       
       it "uses the correct queue" do 
-        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+        ResqueSpec.queue_by_name(:test_queue_scheduled).should_not be_empty
       end
     end
     
@@ -143,19 +143,19 @@ describe ResqueSpec do
       end
 
       it "adds to the scheduled queue hash" do
-        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+        ResqueSpec.queue_by_name(:test_queue_scheduled).should_not be_empty
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NoQueueClass.to_s)
+        ResqueSpec.queue_by_name(:test_queue_scheduled).first.should include(:class => NoQueueClass.to_s)
       end
 
       it "sets the arguments on the queue" do
-        ResqueSpec.queue_by_name(:test_queue).first.should include(:time => Time.now + scheduled_in)
+        ResqueSpec.queue_by_name(:test_queue_scheduled).first.should include(:time => Time.now + scheduled_in)
       end
       
       it "uses the correct queue" do 
-        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+        ResqueSpec.queue_by_name(:test_queue_scheduled).should_not be_empty
       end
     end
 

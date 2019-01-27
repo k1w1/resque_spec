@@ -109,7 +109,7 @@ module ScheduleQueueHelper
     klass.instance_eval do
       self.queue_name = nil
       chain :queue do |queue_name|
-        self.queue_name = queue_name
+        self.queue_name = ResqueSpec.schedule_queue_name_for_queue_name(queue_name)
       end
     end
   end
