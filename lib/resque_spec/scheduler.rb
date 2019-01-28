@@ -47,12 +47,12 @@ module ResqueSpec
   end
 
   def enqueue_at(time, klass, *args)
-    enqueue_at_with_queue(schedule_queue_name(klass), time, klass, *args)
+    enqueue_at_with_queue(queue_name(klass), time, klass, *args)
   end
 
   def enqueue_at_with_queue(queue, time, klass, *args)
     is_time?(time)
-    perform_or_store(queue, :class => klass.to_s, :time  => time, :stored_at => Time.now, :args => args)
+    perform_or_store(schedule_queue_name_for_queue_name(queue), :class => klass.to_s, :time  => time, :stored_at => Time.now, :args => args)
   end
 
   def enqueue_in(time, klass, *args)
@@ -77,6 +77,10 @@ module ResqueSpec
     queue_by_name(schedule_queue_name(klass))
   end
 
+  def schedule_queue_name_for_queue_name(queue_name)
+    "#{queue_name}_scheduled"
+  end
+
   private
 
   def is_time?(time)
@@ -84,7 +88,7 @@ module ResqueSpec
   end
 
   def schedule_queue_name(klass)
-    "#{queue_name(klass)}_scheduled"
+    schedule_queue_name_for_queue_name(queue_name(klass))
   end
 end
 
