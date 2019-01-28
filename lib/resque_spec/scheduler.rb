@@ -39,6 +39,12 @@ module ResqueSpec
       ResqueSpec.enqueue_in_with_queue(queue, time, klass, *args)
     end
 
+    def delayed?(klass, *args)
+      return delayed_without_resque_spec(klass, *args) if ResqueSpec.disable_ext && respond_to?(:delayed_without_resque_spec)
+
+      ResqueSpec.delayed?(klass, *args)
+    end
+
     def remove_delayed(klass, *args)
       return remove_delayed_without_resque_spec(klass, *args) if ResqueSpec.disable_ext && respond_to?(:remove_delayed_without_resque_spec)
 
@@ -61,6 +67,13 @@ module ResqueSpec
 
   def enqueue_in_with_queue(queue, time, klass, *args)
     enqueue_at_with_queue(queue, Time.now + time, klass, *args)
+  end
+
+  def delayed?(klass, *args)
+    sched_queue = queue_by_name(schedule_queue_name(klass))
+    sched_queue.any? do |job|
+      job[:class] == klass.to_s && job[:args] == args
+    end
   end
 
   def remove_delayed(klass, *args)
