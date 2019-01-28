@@ -159,6 +159,33 @@ describe ResqueSpec do
       end
     end
 
+    describe "#delayed?" do
+      let(:job_class) { NameFromClassMethod }
+      let(:args) { [1] }
+
+      describe "when the job has not been scheduled" do
+        it "should return false" do
+          Resque.delayed?(job_class, *args).should be(false)
+        end
+      end
+
+      describe "when the job has been scheduled" do
+        before { Resque.enqueue_at(scheduled_at, job_class, *args) }
+
+        it "should return true" do
+          Resque.delayed?(job_class, *args).should be(true)
+        end
+      end
+
+      describe "when the job has been queued normally" do
+        before { Resque.enqueue(job_class, *args) }
+
+        it "should return false" do
+          Resque.delayed?(job_class, *args).should be(false)
+        end
+      end
+    end
+
     describe "#remove_delayed" do
       describe "with #enqueue_at" do
         before do
